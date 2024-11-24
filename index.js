@@ -7,6 +7,7 @@
 const cookieParser = require("cookie-parser");
 const connectDB = require("./src/configs/db");
 const express = require("express");
+const scheduleBlacklistCleanup = require("./src/helpers/blacklistCleaner");
 const app = express();
 
 /****************************************************/
@@ -20,6 +21,9 @@ require("express-async-errors");
 /****************************************************/
 // DB Connection
 connectDB();
+
+// Blacklist Cleaner
+scheduleBlacklistCleanup();
 
 /****************************************************/
 // Middlewares:
