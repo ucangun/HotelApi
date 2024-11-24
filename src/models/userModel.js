@@ -1,4 +1,5 @@
-const { Schema, model } = require("mongoose");
+const mongoose = require("mongoose");
+const { Schema } = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 
@@ -47,4 +48,6 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-module.exports = model("User", userSchema);
+const User = mongoose.model("User", userSchema);
+
+module.exports = User;
