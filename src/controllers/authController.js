@@ -72,7 +72,15 @@ exports.login = async (req, res) => {
 };
 
 exports.logout = async (req, res) => {
-  const token = req.cookies.jwt;
+  let token;
+
+  if (req.cookies.jwt) {
+    token = req.cookies.jwt;
+  }
+
+  if (!token && req.body.token) {
+    token = req.body.token;
+  }
 
   if (token) {
     await blacklistToken(token);
