@@ -26,6 +26,7 @@ const reservationSchema = new Schema(
     },
     night: {
       type: Number,
+      default: 1,
       required: true,
     },
     price: {
@@ -34,7 +35,12 @@ const reservationSchema = new Schema(
     },
     totalPrice: {
       type: Number,
-      required: true,
+      default: function () {
+        return this.night * this.price;
+      }, // Create
+      transform: function () {
+        return this.night * this.price;
+      }, //Update
     },
   },
   {
