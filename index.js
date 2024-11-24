@@ -4,7 +4,7 @@
 # npm i express dotenv
 # npm i mongoose             
 /****************************************************/
-
+const cookieParser = require("cookie-parser");
 const connectDB = require("./src/configs/db");
 const express = require("express");
 const app = express();
@@ -25,6 +25,7 @@ connectDB();
 // Middlewares:
 
 app.use(express.json());
+app.use(cookieParser());
 
 // findSearchSortPage / res.getModelList:
 app.use(require("./src/middlewares/queryHandler"));
