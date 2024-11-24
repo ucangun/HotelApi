@@ -1,9 +1,20 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
+const Blacklist = require("../models/blacklistModel");
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+};
+
+const blacklistToken = async (token) => {
+  const decoded = jwt.decode(token);
+  const expTimestamp = decoded.exp * 1000;
+
+  await Blacklist.create({
+    token: token,
+    expiresAt: new Date(expTimestamp),
   });
 };
 
@@ -60,7 +71,12 @@ exports.login = async (req, res) => {
   createSendToken(user, 200, res);
 };
 
-exports.logout = (req, res) => {
+exports.logout = async (req, res) => {
+  const token = req.cookies.jwt;
+
+  if (token) {
+    await blacklistToken(token);
+  }
   res.cookie("jwt", "loggedout", {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
