@@ -1,0 +1,62 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Logs
+logs
+*.log
+*.log.*
+log/
+
+# Dependency directories
+jspm_packages/
+.bower_components/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Editor-specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+*.swo
+*.bak
+
+# Build output
+dist/
+build/
+out/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# TypeScript
+*.tsbuildinfo
+
+# Miscellaneous
+coverage/
+.cache/
+*.pid
+*.seed
+*.pid.lock
+*.sublime-project
+*.sublime-workspace
+
+# Debugger files
+*.stackdump
+
+# Temporary files
+*.tmp
+*.temp
+~$
+
+# Git-specific
+.git/
