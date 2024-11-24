@@ -6,10 +6,15 @@
 /****************************************************/
 
 const express = require("express");
-const app = express();
+const connectDB = require("./src/configs/db");
 require("dotenv").config();
+const app = express();
 
 const PORT = process.env.PORT || 8000;
+
+/****************************************************/
+// DB Connection
+connectDB();
 
 /****************************************************/
 // Middlewares:
