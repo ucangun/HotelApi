@@ -120,11 +120,12 @@ exports.login = async (req, res) => {
     throw new Error("Incorrect email or password", 401);
   }
 
-  // 3) If everything ok, send token to client
-
+  // 3) Check if user isVerified
   if (!user.isVerified) {
     throw new Error("Please verify your email before logging in", 401);
   }
+
+  // 4) If everything ok, send token to client
   createSendToken(user, 200, res);
 };
 
