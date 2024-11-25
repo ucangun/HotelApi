@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 const Blacklist = require("../models/blacklistModel");
+const { promisify } = require("util");
+const sendEmail = require("../helpers/sendEmail");
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -52,7 +54,7 @@ exports.signup = async (req, res, next) => {
 
   const verificationToken = signToken(newUser._id);
 
-  const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
+  const verificationUrl = `${process.env.FRONTEND_URL}/auth/verify-email?token=${verificationToken}`;
 
   const message = `Welcome to our application! Please verify your email by clicking the following link: \n\n ${verificationUrl}`;
 
@@ -67,6 +69,42 @@ exports.signup = async (req, res, next) => {
     message: "A verification email has been sent to your email address.",
   });
 };
+
+exports.verifyEmail = async (req, res, next) => {
+  const { token } = req.query;
+  if (!token) {
+    return res.status(400).json({
+      status: "fail",
+      message: "Invalid or missing token.",
+    });
+  }
+
+  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+
+  const user = await User.findById(decoded.id);
+  if (!user) {
+    return res.status(404).json({
+      status: "fail",
+      message: "User not found.",
+    });
+  }
+
+  if (user.isVerified) {
+    return res.status(400).json({
+      status: "fail",
+      message: "Email already verified.",
+    });
+  }
+
+  user.isVerified = true;
+  await user.save({ validateBeforeSave: false });
+
+  res.status(200).json({
+    status: "success",
+    message: "Email successfully verified!",
+  });
+};
+
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -83,6 +121,10 @@ exports.login = async (req, res) => {
   }
 
   // 3) If everything ok, send token to client
+
+  if (!user.isVerified) {
+    throw new Error("Please verify your email before logging in", 401);
+  }
   createSendToken(user, 200, res);
 };
 
