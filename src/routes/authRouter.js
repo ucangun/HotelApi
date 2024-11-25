@@ -11,6 +11,8 @@ const {
   login,
   logout,
   verifyEmail,
+  forgotPassword,
+  resetPassword,
 } = require("../controllers/authController");
 
 // URL: /auth
@@ -18,7 +20,11 @@ const {
 router.post("/signup", signup);
 router.post("/login", login);
 router.post("/logout", protect, logout);
+
 router.get("/verify-email", verifyEmail);
+
+router.post("/forgotPassword", forgotPassword);
+router.patch("/resetPassword/:token", resetPassword);
 
 /* ------------------------------------------------------- */
 module.exports = router;

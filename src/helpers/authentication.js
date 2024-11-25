@@ -35,7 +35,7 @@ const protect = async (req, res, next) => {
   // 4) Verify the token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
-  // 5) Check if the user still exists
+  // 5) Check if the user still exis
   const currentUser = await User.findById(decoded.id);
   if (!currentUser) {
     return res.status(401).json({
