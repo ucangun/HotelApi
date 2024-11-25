@@ -47,11 +47,26 @@ exports.signup = async (req, res, next) => {
     username: req.body.username,
     email: req.body.email,
     password: req.body.password,
+    isVerified: false,
   });
 
-  createSendToken(newUser, 201, res);
-};
+  const verificationToken = signToken(newUser._id);
 
+  const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
+
+  const message = `Welcome to our application! Please verify your email by clicking the following link: \n\n ${verificationUrl}`;
+
+  await sendEmail({
+    email: newUser.email,
+    subject: "Verify Your Email",
+    message,
+  });
+
+  res.status(201).json({
+    status: "success",
+    message: "A verification email has been sent to your email address.",
+  });
+};
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
