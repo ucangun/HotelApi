@@ -6,10 +6,14 @@ const router = require("express").Router();
 /* ------------------------------------------------------- */
 //ROUTER INDEX:
 
-//  URL: /
-
 // Auth:
 router.use("/auth", require("./authRouter"));
+
+// Reservations:
+router.use("/reservations", require("./reservationsRouter"));
+
+// Rooms:
+router.use("/rooms", require("./roomsRouter"));
 
 /* ------------------------------------------------------- */
 module.exports = router;
